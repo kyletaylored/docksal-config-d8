@@ -1,0 +1,14 @@
+#!/usr/bin/env bash
+
+#: exec_target = cli
+
+## Import mysql_db dump from Acquia
+##
+## Usage: fin db-import site_config
+
+set -e # Abort if anything fails
+#set -x  # Echo commands
+
+cd ${DOCROOT_PATH}
+
+fin drush sql:sync ${SOURCE_ALIAS} @self -y

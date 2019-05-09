@@ -1,0 +1,15 @@
+#!/usr/bin/env bash
+
+#: exec_target = cli
+
+## Update site db
+##
+## Usage: fin db-update siteconfig
+
+set -e  # Abort if anything fails
+#set -x  # Echo commands
+
+cd ${DOCROOT_PATH}
+
+## Run the drush commands.
+fin drush -y cr updb

@@ -1,0 +1,47 @@
+#!/usr/bin/env bash
+
+#: exec_target = cli
+
+## Initialize/reinstall site
+##
+## Usage: fin site-init siteconfig
+
+# Abort if anything fails
+set -e
+#set -x
+
+echo "Starting site init..."
+
+#-------------------------- Settings -------------------------------------
+# PROJECT_ROOT and DOCROOT are set as env variables in cli
+SITE_DIRECTORY=${SITE_DIRECTORY:-default}
+DOCROOT=${DOCROOT:-docroot}
+DOCROOT_PATH="${PROJECT_ROOT}/${DOCROOT}"
+SITEDIR_PATH="${DOCROOT_PATH}/sites/${SITE_DIRECTORY}"
+#-------------------------- END: Settings --------------------------------
+
+#-------------------------- Functions---- --------------------------------
+# Fix file/folder permissions
+fix_permissions ()
+{
+  echo "Making site directory writable..."
+  chmod 755 "${DOCROOT_PATH}"
+}
+
+copy_file()
+{
+	local source="$1"
+	local dest="$2"
+	cp $source $dest
+}
+#-------------------------- END: Functions --------------------------------
+
+#-------------------------- Execution -------------------------------------
+fix_permissions
+
+# Project initialization steps
+copy_file "${PROJECT_ROOT}/.docksal/drupal/settings.local.php" "${SITEDIR_PATH}/settings.local.php"
+copy_file "${PROJECT_ROOT}/.docksal/drupal/settings.php" "${SITEDIR_PATH}/settings.php"
+
+composer install
+#-------------------------- END: Execution --------------------------------
